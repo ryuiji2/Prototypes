@@ -14,17 +14,24 @@ public class UIManager : MonoBehaviour {
     public GameObject player;
     Vector2 resetPos;
     public List<GameObject> lineList;
+    public Rigidbody2D rb;
 
 	void Start () 
 	{
 		ui.SetActive(false);
         resetPos = player.transform.position;
+        rb = player.GetComponent<Rigidbody2D>();
 	}
 
-	void Update () 
-	{
-		UIUpdate();
-	}
+    void Update()
+    {
+        UIUpdate();
+        if (Input.GetButtonDown("Start"))
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            SpaceToPlay();
+        }
+    }
 
 	void UIUpdate()
 	{
@@ -49,12 +56,18 @@ public class UIManager : MonoBehaviour {
 
 	}
 
-    public void ResetAll()
+    public void ResetPlayer()
     {
-        spaceToPlay.SetActive(true);
         player.transform.position = resetPos;
         player.transform.eulerAngles = new Vector3(0, 0, 0);
-        player.GetComponent<Player>().rb.bodyType = RigidbodyType2D.Static;
+        rb.bodyType = RigidbodyType2D.Static;
+        spaceToPlay.SetActive(true);
+    }
+
+    public void ResetAll()
+    {
+
+        ResetPlayer();
 
 
         for (int i = 0; i < lineList.Count; i++)
