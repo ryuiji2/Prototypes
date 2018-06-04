@@ -11,6 +11,7 @@ public class LineManager : MonoBehaviour {
 	public GameObject bounceLine;
 
 	public GameObject canvas;
+    public GameObject uiMan;
 
 	Line activeLine;
 
@@ -19,6 +20,7 @@ public class LineManager : MonoBehaviour {
 	{
 		linePrefab = normLine;
 	}
+
 	void Update()
 	{
 
@@ -27,6 +29,7 @@ public class LineManager : MonoBehaviour {
 			{
 				GameObject lineGO = Instantiate(linePrefab);
 				activeLine = lineGO.GetComponent<Line>();
+                uiMan.GetComponent<UIManager>().lineList.Add(lineGO);
 			}
 
 			if(Input.GetMouseButtonUp(0))
