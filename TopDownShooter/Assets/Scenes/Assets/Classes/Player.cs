@@ -47,12 +47,15 @@ public class Player : MonoBehaviour {
 	}
 
 	void Shoot(){
-		if(Input.GetMouseButton(0) && allowFire && currAmmo > 0){
-			currAmmo--;
-			GameObject spawnedBullet = Instantiate(bullet, shootLoc.transform.position, Quaternion.Euler(new Vector3(0,0,90)));
-			spawnedBullet.GetComponent<Rigidbody>().AddForce(transform.forward * 2000);
-			Destroy (spawnedBullet, 2.0f);
-			StartCoroutine(FireRate());
+		if(Manager.instance.pauseText.activeInHierarchy == false){
+
+			if(Input.GetMouseButton(0) && allowFire && currAmmo > 0){
+				currAmmo--;
+				GameObject spawnedBullet = Instantiate(bullet, shootLoc.transform.position, Quaternion.Euler(new Vector3(0,0,90)));
+				spawnedBullet.GetComponent<Rigidbody>().AddForce(transform.forward * 2000);
+				Destroy (spawnedBullet, 2.0f);
+				StartCoroutine(FireRate());
+			}
 		}
 	}
 	IEnumerator FireRate(){
@@ -68,6 +71,10 @@ public class Player : MonoBehaviour {
 				StartCoroutine(ReloadFlash());
 			}
 		}
+	}
+
+	public void StartFlasher(){
+		StartCoroutine(HitFlasher());
 	}
 	IEnumerator ReloadTime(){
 
@@ -107,6 +114,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void Death(){
+		GetComponent<AudioSource>().Play();
 		Manager.instance.enemy.health = 0;
 		Manager.instance.points = 0;
 		Manager.instance.kills = 0;
@@ -114,6 +122,7 @@ public class Player : MonoBehaviour {
 		Manager.instance.enemy.damage = 10;
 		Manager.instance.bullet.givePoints = 10;
 		Manager.instance.enemy.givePoints = 50;
+		Manager.instance.enemy.moveSpeed = 5;
 		currAmmo = maxAmmo;
 		invul = false;
 		myMaterial.color = normalColor;

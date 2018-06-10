@@ -15,11 +15,8 @@ public class Enemy : MonoBehaviour {
 	public int yesDrop;
 	public int dropChance;
 
-	void Start () {
+	void Awake () {
 		player = Player.instance.gameObject;
-		health = 100;
-		damage = 10;
-		givePoints = 50;
 
 		canDrop = Random.Range(0, dropChance);
 	}
@@ -40,7 +37,8 @@ public class Enemy : MonoBehaviour {
 			EnemySpawn.instance.currSpawn--;
 
 			if(canDrop == yesDrop){
-				Instantiate(pack,transform.position,Quaternion.identity);
+				Vector3 dropLoc = new Vector3(transform.position.x, -0.4f, transform.position.z);
+				Instantiate(pack,dropLoc,Quaternion.identity);
 			}
 			Destroy(gameObject);
 		}
@@ -48,8 +46,8 @@ public class Enemy : MonoBehaviour {
 		void OnCollisionEnter(Collision collider){
 		if(player.GetComponent<Player>().invul == false){
 			if(collider.transform.tag == "Player"){
-				StartCoroutine(player.GetComponent<Player>().HitFlasher());
-				player.GetComponent<Player>().health -= damage;
+				player.GetComponent<Player>().StartFlasher();
+				player.GetComponent<Player>().health = Mathf.Ceil(player.GetComponent<Player>().health -= damage);
 
 			}
 		}

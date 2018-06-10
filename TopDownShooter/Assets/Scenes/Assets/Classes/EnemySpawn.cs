@@ -27,7 +27,7 @@ public class EnemySpawn : MonoBehaviour {
 		yield return new WaitForSeconds(spawnTime);
 		if(currSpawn < maxSpawn){
 			GameObject spawnLoc = spawnPoints[Random.Range(0, spawnPoints.Count)];
-			GameObject spawnedEnemy = Instantiate(enemy,spawnLoc.transform.position, Quaternion.identity);
+			Instantiate(enemy,spawnLoc.transform.position, Quaternion.identity);
 			currSpawn++;
 		}
 		StartCoroutine(Spawn());

@@ -14,6 +14,7 @@ public class Manager : MonoBehaviour {
 	public Text ammoText;
 	public GameObject reloadingText;
 	public GameObject strongerText;
+	public GameObject pauseText;
 	public Enemy enemy;
 	public Bullet bullet;
 	public int stronger;
@@ -21,28 +22,56 @@ public class Manager : MonoBehaviour {
 	public float points;
 	private int flashTimes = 3;
 
+	bool paused;
+
+
+
 	private void Awake(){
 		if(instance == null){
 			instance = this;
 		}
 	}
 
-	void Update () {
-		UIUpdate();
-		Mathf.Ceil(points);
+	void Start(){
+		enemy.health = 100;
+		enemy.damage = 10;
+		enemy.moveSpeed = 5;
+		enemy.givePoints = 50;
+		bullet.givePoints = 10;
 	}
 
+	void Update () {
+		UIUpdate();
+		Pause();
+	}
+
+	void Pause()
+	{
+		if(Input.GetButtonDown("Esc"))
+		{
+			paused = !paused;
+		}
+
+		if(paused){
+			pauseText.SetActive(true);
+			Time.timeScale = 0;
+		} else{
+			Time.timeScale = 1;
+			pauseText.SetActive(false);
+		}
+	}
 	void UIUpdate(){
 		killText.text = "Kills: " + kills;
-		pointText.text = "Points: " + points;
+		pointText.text = "Points: " + "\n" + points;
 	}
 
 	public void Stronger(){
 		if(kills == stronger){
 			enemy.health *= 1.1f;
 			enemy.damage *= 1.05f;
-			enemy.givePoints *= 1.1f;
-			bullet.givePoints *= 1.1f;
+			enemy.moveSpeed *= 1.15f;
+			enemy.givePoints = Mathf.Ceil(enemy.givePoints *= 1.1f);
+			bullet.givePoints = Mathf.Ceil(bullet.givePoints *= 1.1f);
 			stronger *= 2;
 			StartCoroutine(StrongerFlash());
 		}

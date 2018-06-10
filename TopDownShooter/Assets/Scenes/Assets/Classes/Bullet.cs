@@ -10,7 +10,6 @@ public class Bullet : MonoBehaviour {
 
 void Start(){
 	damage = 8;
-	givePoints = 10;
 }
 	public void OnCollisionEnter(Collision collider){
 		if(collider.transform.tag == "Enemy"){
